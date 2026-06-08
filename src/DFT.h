@@ -10,6 +10,10 @@
 #endif
 
 
+constexpr double  FACTOR = 1e12;		// Scaling factor used to isolate the first 12 decimal places for rounding
+constexpr double EPSILON = 1e-12;		// Threshold to suppress residual floating-point noise below the 12th decimal
+
+
 /**
  * @brief This namespace provides an optimized implementation of the complex-valued DFT (Discrete Fourier Transform) for both
  * forward and inverse transformations, based on academic lecture specifications.
@@ -67,20 +71,19 @@ namespace DFT
 	//													r o u n d _ c o m p l e x												//
 	//==========================================================================================================================//
 	/**
-	 * @brief Rounds up to 15 decimal places and sets values ​​close to 0 directly to 0.
-	 * @param c complex-valued number
-	 * @param decimals amount of decimal places to which rounding is performed (default: 15)
-	 * @return passed complex number (rounded)
+	 * @brief Rounds a complex number to a fixed precision of 12 decimal places. Clamps values extremely close to 0.0 directly
+	 * to absolute zero to eliminate accumulated floating-point arithmetic noise in the terminal output.
+	 * @param c the complex-valued number to be conditioned
+	 * @return a new `std::complex<double>` with rounded and cleaned components
 	 */
-	inline std::complex<double> round_complex(const std::complex<double>& c, int decimals = 15)
+	inline std::complex<double> round_complex(const std::complex<double>& c)
 	{
-		double factor = std::pow(10.0, decimals);
-		double re = std::round(c.real() * factor) / factor;
-		double im = std::round(c.imag() * factor) / factor;
-		if (std::abs(re) < 1e-15)
-			re = 0.0;
-		if (std::abs(im) < 1e-15)
-			im = 0.0;
+		double re = std::round(c.real() * FACTOR) / FACTOR;
+		double im = std::round(c.imag() * FACTOR) / FACTOR;
+
+		if (std::abs(re) < EPSILON) re = 0.0;
+		if (std::abs(im) < EPSILON) im = 0.0;
+
 		return { re, im };
 	}
 
@@ -91,13 +94,12 @@ namespace DFT
 	 * @brief Outputs the identifying text of a "signal" and its samples ​​to the console
 	 * @param label the identifying text of a "signal"
 	 * @param v the samples of a complex-valued "signal"
-	 * @param decimals amount of decimal places to which rounding is performed (default: 15)
 	 */
-	inline void print(const std::string& label, const std::vector<std::complex<double>>& v, int decimals = 15)
+	inline void print(const std::string& label, const std::vector<std::complex<double>>& v)
 	{
 		std::cout << label << ": ";
 		for (auto& c : v)
-			std::cout << round_complex(c, decimals) << " ";
+			std::cout << round_complex(c) << " ";
 		std::cout << std::endl;
 	}
 }
