@@ -47,7 +47,7 @@ inline Signal::Signal(char t_label, std::vector<std::complex<double>> data) : t_
 	if (std::isalpha(static_cast<unsigned char>(t_label)))
 		this->t_label = static_cast<char>(std::tolower(static_cast<unsigned char>(t_label)));
 
-	f_label = this->t_label - 32;
+	f_label = static_cast<char>(this->t_label - 32);
 
 	DFT::print(std::string(1, t_label) + xtra, t_data);
 }
@@ -60,12 +60,12 @@ inline Signal::Signal(char t_label, std::vector<std::complex<double>> data) : t_
  * @param data the complex-valued samples of the signal @frequency domain
  * @param xtra additional identifier to append to the label (default = "") - to use especially when splitting a signal
  */
-inline Signal::Signal(char t_label, std::vector<std::complex<double>> data, std::string xtra) : f_data(std::move(data)), xtra(xtra)
+inline Signal::Signal(char t_label, std::vector<std::complex<double>> data, std::string xtra) : f_data(std::move(data)), xtra(std::move(xtra))
 {
 	if (std::isalpha(static_cast<unsigned char>(t_label)))
 		this->t_label = static_cast<char>(std::tolower(static_cast<unsigned char>(t_label)));
 
-	f_label = this->t_label - 32;
+	f_label = static_cast<char>(this->t_label - 32);
 
 	DFT::print(std::string(1, f_label) + xtra, f_data);
 }
@@ -100,7 +100,7 @@ inline void Signal::to_time()
  */
 inline std::pair<Signal, Signal> Signal::split_dual()
 {
-	// to_freq() the dual signal
+	// to_freq() the DUAL signal
 	f_data = DFT::dft(t_data);
 
 	size_t N = f_data.size();
@@ -123,7 +123,7 @@ inline std::pair<Signal, Signal> Signal::split_dual()
 		f_d2.emplace_back((X_k - X_k_conj) / (2.0 * j));
 	}
 
-	// instantiating both signals on-the-fly (moving temporary samples to avoid copies)
+	// instantiating both signals on-the-fly @frequency domain (moving temporary samples to avoid copies)
 	Signal s1(f_label, std::move(f_d1), "_1");
 	Signal s2(f_label, std::move(f_d2), "_2");
 

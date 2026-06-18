@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <complex>
+#include <cstdint>
 #include <vector>
 #include <string>
 #include <cmath>
@@ -37,12 +38,12 @@ namespace DFT
 	 */
 	inline std::vector<std::complex<double>> dft(std::vector<std::complex<double>>& x, bool invert = false)
 	{
-		int N = x.size();
+		uint32_t N = x.size();
 
 		std::vector<std::complex<double>> y(N);
 
 		// optimized loop
-		for (int n = 0; n < N; n++)
+		for (uint32_t n = 0; n < N; n++)
 		{
 			double angle = 2.0 * M_PI * n / N;
 
@@ -100,6 +101,6 @@ namespace DFT
 		std::cout << label << ": ";
 		for (auto& c : v)
 			std::cout << round_complex(c) << " ";
-		std::cout << std::endl;
+		std::cout << "\n";
 	}
 }
