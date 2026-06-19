@@ -20,12 +20,13 @@ This project represents a complete, high-level refactoring of a traditional acad
 
 The project follows a clean, modern, header-only logic design separated into mathematical operations and state management:
 
+
 ```
 DFT/
 ├── src/
-│   ├── DFT.h         # Division algorithms & Square-and-Multiply (namespace)
-│   ├── Signal.h      # RSA class declaration (interface)
-│   └── main.cpp      # Application entry point (instantiation & execution only)
+│   ├── DFT.h         # Core DFT logic & mathematical transform routines (namespace)
+│   ├── Signal.h      # User interface for signal structuring and multi-signal management
+│   └── main.cpp      # Application entry point (signal instantiation & execution only)
 ├── .gitignore        # Specifies intentionally untracked files to ignore
 ├── LICENSE           # MIT License File
 └── README.md         # Project documentation and architecture overview
