@@ -16,7 +16,7 @@ This project represents a complete, high-level refactoring of a traditional acad
 
 ---
 
-## 🛠️ System Architecture & Code Structure
+## 📂 System Architecture & Code Structure
 
 The project follows a clean, modern, header-only logic design separated into mathematical operations and state management:
 
